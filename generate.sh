@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -o errexit -o nounset -o pipefail
 
 if [[ -z "$FIX_ACCOUNT_ID" ]]; then
     echo "ERROR: FIX_ACCOUNT_ID environment variable is not set."
