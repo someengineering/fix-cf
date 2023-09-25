@@ -3,10 +3,10 @@ Description: This CloudFormation template creates a role in your AWS account tha
 
 Parameters:
   FixTenantId:
-    Description: Your FIX assigned tenant ID (DO NOT EDIT)
+    Description: Your FIX-assigned Tenant ID (DO NOT EDIT)
     Type: String
   FixExternalId:
-    Description: Your FIX assigned external ID (DO NOT EDIT)
+    Description: Your FIX-assigned External ID (DO NOT EDIT)
     Type: String
 
 Outputs:
