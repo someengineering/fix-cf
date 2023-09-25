@@ -49,5 +49,6 @@ The request body comprises a JSON object with this structure:
     "role_name": "<the name of the created role>",
     "stack_id": "<the ARN of the created stack>"
 }
+```
 
 FIX leverages the tenant_id and external_id to authenticate the request's origin. The account_id and role_name are utilized to construct the ARN that FIX will assume for security audit purposes, while the stack_id offers user convenience within the FIX UI by providing a link to the CloudFormation stack in the AWS console.
