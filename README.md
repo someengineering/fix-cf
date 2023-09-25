@@ -15,8 +15,8 @@ The following parameters are required for the CloudFormation template:
 
 | Parameter | Description |
 | ---------- | ---------- |
-| `FixTenantId`   | Your FIX assigned tenant ID |
-| `FixExternalId` | Your FIX assigned external ID |
+| `FixTenantId`   | Your FIX assigned Tenant ID |
+| `FixExternalId` | Your FIX assigned External ID |
 
 Both of these are generated and provided by FIX. They can be found in your FIX account settings and are pre-filled when using the links in the FIX application.
 
