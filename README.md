@@ -24,11 +24,11 @@ Both of these are generated and provided by FIX. They can be found in your FIX a
 
 The following resources are created by the CloudFormation template:
 
-`FixCrossAccountAccessRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)) - The cross account access role that allows FIX to access your AWS account.
-`FixAccessFunction` ([Custom::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-lambda.html)) - This custom resource is used to trigger the Lambda function that calls back to FIX.
-`FixAccessCallbackFunction` ([AWS::Lambda::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html)) - The Lambda function that calls back to FIX.
-`FixAccessCallbackFunctionRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)) - The IAM role that allows the Lambda function to run.
-`FixAccessCallbackLogGroup` ([AWS::Logs::LogGroup](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html)) - The CloudWatch log group for the Lambda function that calls back to FIX.
+* `FixCrossAccountAccessRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)) - The cross account access role that allows FIX to access your AWS account.
+* `FixAccessFunction` ([Custom::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-lambda.html)) - This custom resource is used to trigger the Lambda function that calls back to FIX.
+* `FixAccessCallbackFunction` ([AWS::Lambda::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html)) - The Lambda function that calls back to FIX.
+* `FixAccessCallbackFunctionRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)) - The IAM role that allows the Lambda function to run.
+* `FixAccessCallbackLogGroup` ([AWS::Logs::LogGroup](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html)) - The CloudWatch log group for the Lambda function that calls back to FIX.
 
 
 ## FIX Cross Account Access Role
