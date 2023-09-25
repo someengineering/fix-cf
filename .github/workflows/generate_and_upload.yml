@@ -1,0 +1,42 @@
+name: Generate and Upload
+
+on:
+    push:
+      tags:
+        - "*.*.*"
+      branches:
+        - main
+    pull_request:
+    workflow_dispatch:
+
+env:
+    FIX_ACCOUNT_ID: ${{ vars.FIX_ACCOUNT_ID }}
+
+jobs:
+  generate-and-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Create Temp Directory
+      id: tempdir
+      run: echo "dir=$(mktemp -d)" >> $GITHUB_OUTPUT
+
+    - name: Run the script
+      run: bash generate.sh "${{ steps.tempdir.outputs.dir }}"
+
+    - name: Upload to S3
+      if: github.event_name != 'pull_request'
+      run: aws s3 sync "${{ steps.tempdir.outputs.dir }}/" s3://fixpublic/aws/
+  
+    - name: Remove Temp Directory
+      run: rm -rf "${{ steps.tempdir.outputs.dir }}"
