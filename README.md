@@ -2,22 +2,23 @@
 
 ## Description
 
-This repository contains the CloudFormation templates for the [FIX SaaS](https://fix.tt/) cross account access hosted at [https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml).
+This repository contains the CloudFormation templates for the [FIX SaaS](https://fix.tt/) cross account access, hosted at [https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml) and [https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml).
 
-The purpose of this repository is to provide a publicly auditable history for the FIX CloudFormation template.
+The purpose of this repository is to provide a publicly auditable history of the FIX CloudFormation template.
 
-The stack creates primarily a cross account access role that allows FIX to access your AWS account. The role is created in your AWS account and is assumable by FIX. The role is created with a trust policy that allows FIX to assume the role using the assigned external ID. In addition the stack creates a Lambda function that triggers a callback to FIX, letting us know the name of the role that was created, the account id of the account the role was created in as well as the ARN of the stack. This allows us to verify that the role was created successfully and that the role is assumable by FIX.
+The stack creates a cross account access role that allows FIX to access your AWS account. The role is created in your AWS account and is assumable by FIX for the purpose of performing security scans in your account. In addition the stack creates a Lambda function that triggers a callback to FIX, letting us know the name of the role that was created, the account id of the account the role was created in as well as the ARN of the stack. This allows us to verify that the role was created successfully and that the role is assumable by FIX.
 
 
 ## CloudFormation Template Parameters
 
-The following parameters are available for the CloudFormation template:
+The following parameters are required for the CloudFormation template:
 
 | Parameter | Description |
 | ---------- | ---------- |
 | `FixTenantId`   | Your FIX assigned tenant ID |
 | `FixExternalId` | Your FIX assigned external ID |
 
+Both of these are generated and provided by FIX. They can be found in your FIX account settings and are pre-filled when using the links in the FIX application.
 
 ## CloudFormation Resources
 
@@ -38,8 +39,8 @@ The role is created with a trust policy that allows FIX to assume the role. For 
 ## Technical Details of the Callback API
 
 The Lambda function sends a HTTP POST request to the following URL:
-- `https://app.eu.fixcloud.io/api/cloud/callbacks/aws/cf` if you're using the FIX EU environment
 - `https://app.us.fixcloud.io/api/cloud/callbacks/aws/cf` if you're using the FIX US environment
+- `https://app.eu.fixcloud.io/api/cloud/callbacks/aws/cf` if you're using the FIX EU environment
 
 The request body is a JSON object with the following structure:
 
