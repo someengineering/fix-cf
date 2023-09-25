@@ -22,13 +22,13 @@ Both of these are generated and provided by FIX. They can be found in your FIX a
 
 ## CloudFormation Resources
 
-The following resources are created by the CloudFormation template:
+The CloudFormation template creates the following resources:
 
-* `FixCrossAccountAccessRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)) - The cross account access role that allows FIX to access your AWS account.
-* `FixAccessFunction` ([Custom::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-lambda.html)) - This custom resource is used to trigger the Lambda function that calls back to FIX. It is internal to the CloudFormation stack and does not result in an actual resource being created in the AWS account.
-* `FixAccessCallbackFunction` ([AWS::Lambda::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html)) - The Lambda function that calls back to FIX.
-* `FixAccessCallbackFunctionRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)) - The IAM role that allows the Lambda function to run.
-* `FixAccessCallbackLogGroup` ([AWS::Logs::LogGroup](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html)) - The CloudWatch log group for the Lambda function. Lambda would automatically create a log group when the function is executed, but by defining the log group as part of the stack we make sure that it is being cleaned up if the stack is deleted.
+* `FixCrossAccountAccessRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)): This is the cross-account access role that enables FIX to access your AWS account.
+* `FixAccessFunction` ([Custom::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-lambda.html)): This custom resource triggers the Lambda function that calls back to FIX. Although it is part of the CloudFormation stack, it does not create an actual resource in the AWS account.
+* `FixAccessCallbackFunction` ([AWS::Lambda::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html)): This Lambda function facilitates the callback to FIX.
+* `FixAccessCallbackFunctionRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)): This IAM role allows the Lambda function to execute.
+* `FixAccessCallbackLogGroup` ([AWS::Logs::LogGroup](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html)): This CloudWatch log group is for the Lambda function. Although Lambda would automatically create a log group upon the function's execution, defining the log group as part of the stack ensures its deletion if the stack is removed.
 
 
 ## FIX Cross Account Access Role
