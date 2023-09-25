@@ -2,56 +2,52 @@
 
 ## Description
 
-This repository contains [the CloudFormation templates](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://fixpublic.s3.amazonaws.com/aws/fix-role-dev-eu.yaml&stackName=FixAccess&param_FixTenantId=00000000-0000-0000-0000-000000000000&param_FixExternalId=00000000-0000-0000-0000-000000000000) for the [FIX SaaS](https://fix.tt/) cross account access, hosted at [https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml) and [https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml).
+This repository hosts the [CloudFormation templates](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://fixpublic.s3.amazonaws.com/aws/fix-role-dev-eu.yaml&stackName=FixAccess&param_FixTenantId=00000000-0000-0000-0000-000000000000&param_FixExternalId=00000000-0000-0000-0000-000000000000) for [FIX SaaS](https://fix.tt/) cross-account access, available at [https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml) and [https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml).
 
-The purpose of this repository is to provide a publicly auditable history of the FIX CloudFormation template.
+The repository aims to provide a publicly auditable history of the FIX CloudFormation template.
 
-The stack creates a cross account access role that allows FIX to access your AWS account. The role is created in your AWS account and is assumable by FIX for the purpose of performing security scans in your account. In addition the stack creates a Lambda function that triggers a callback to FIX, letting us know the name of the role that was created, the account id of the account the role was created in as well as the ARN of the stack. This allows us to verify that the role was created successfully and that the role is assumable by FIX.
-
+The stack sets up a cross-account access role, allowing FIX to access your AWS account. This role, created within your AWS account and assumable by FIX, enables security scans in your account. Additionally, a Lambda function is generated to trigger a callback to FIX, notifying us of the role's name, the account ID in which the role was created, and the ARN of the stack. This information verifies the successful creation and assumability of the role by FIX.
 
 ## CloudFormation Template Parameters
 
-The following parameters are required for the CloudFormation template:
+The CloudFormation template requires the following parameters:
 
 | Parameter | Description |
 | ---------- | ---------- |
-| `FixTenantId`   | Your FIX assigned Tenant ID |
-| `FixExternalId` | Your FIX assigned External ID |
+| `FixTenantId`   | Your FIX-assigned Tenant ID |
+| `FixExternalId` | Your FIX-assigned External ID |
 
-Both of these are generated and provided by FIX. They can be found in your FIX account settings and are pre-filled when using the links in the FIX application.
+These parameters are generated and provided by FIX, accessible within your FIX account settings, and are pre-populated when using the links in the FIX application.
 
 ## CloudFormation Resources
 
 The CloudFormation template creates the following resources:
 
-* `FixCrossAccountAccessRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)): This is the cross-account access role that enables FIX to access your AWS account.
-* `FixAccessFunction` ([Custom::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-lambda.html)): This custom resource triggers the Lambda function that calls back to FIX. Although it is part of the CloudFormation stack, it does not create an actual resource in the AWS account.
+* `FixCrossAccountAccessRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)): This cross-account access role enables FIX to access your AWS account.
+* `FixAccessFunction` ([Custom::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-lambda.html)): This custom resource triggers a Lambda function callback to FIX, though it does not create an actual resource in the AWS account.
 * `FixAccessCallbackFunction` ([AWS::Lambda::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html)): This Lambda function facilitates the callback to FIX.
-* `FixAccessCallbackFunctionRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)): This IAM role allows the Lambda function to execute.
-* `FixAccessCallbackLogGroup` ([AWS::Logs::LogGroup](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html)): This CloudWatch log group is for the Lambda function. Although Lambda would automatically create a log group upon the function's execution, defining the log group as part of the stack ensures its deletion if the stack is removed.
-
+* `FixAccessCallbackFunctionRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)): This IAM role permits the Lambda function to execute.
+* `FixAccessCallbackLogGroup` ([AWS::Logs::LogGroup](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html)): This CloudWatch log group is associated with the Lambda function. While Lambda would automatically create a log group upon function execution, having it defined within the stack ensures its deletion if the stack is removed.
 
 ## FIX Cross Account Access Role
 
-The role is created with a trust policy that allows FIX to assume the role. For extra security it is using a external ID. The role is created with the following permissions: ReadOnlyAccess
-
+The role is established with a trust policy allowing FIX to assume the role. For enhanced security, it utilizes an external ID. The role grants the following permissions: ReadOnlyAccess.
 
 ## Technical Details of the Callback API
 
-The Lambda function sends a HTTP POST request to the following URL:
-- `https://app.us.fixcloud.io/api/cloud/callbacks/aws/cf` if you're using the FIX US environment
-- `https://app.eu.fixcloud.io/api/cloud/callbacks/aws/cf` if you're using the FIX EU environment
+The Lambda function issues an HTTP POST request to the following URLs:
+- `https://app.us.fixcloud.io/api/cloud/callbacks/aws/cf` for the FIX US environment.
+- `https://app.eu.fixcloud.io/api/cloud/callbacks/aws/cf` for the FIX EU environment.
 
-The request body is a JSON object with the following structure:
+The request body comprises a JSON object with this structure:
 
 ```json
 {
     "tenant_id": "<your FIX tenant ID>",
     "external_id": "<your FIX external ID>",
-    "account_id": "<the AWS account ID the role was created in>",
-    "role_name": "<the name of the role that was created>",
-    "stack_id": "<the ARN of the stack that was created>"
+    "account_id": "<the AWS account ID where the role was created>",
+    "role_name": "<the name of the created role>",
+    "stack_id": "<the ARN of the created stack>"
 }
-```
 
-FIX uses the tenant_id and external_id to verify that the request is coming from a valid user. The account_id and role_name are used to construct the ARN that FIX will use to assume the role when performing a security audit. The stack_id is used by the FIX UI for user convenience, to provide a link to the CloudFormation stack in the AWS console.
+FIX leverages the tenant_id and external_id to authenticate the request's origin. The account_id and role_name are utilized to construct the ARN that FIX will assume for security audit purposes, while the stack_id offers user convenience within the FIX UI by providing a link to the CloudFormation stack in the AWS console.
