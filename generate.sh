@@ -5,6 +5,7 @@ if [[ -z "$FIX_ACCOUNT_ID" ]]; then
     echo "ERROR: FIX_ACCOUNT_ID environment variable is not set."
     exit 1
 fi
+fix_account_id=$FIX_ACCOUNT_ID
 
 temp_dir=$1
 if [[ -z "$temp_dir" ]]; then
@@ -16,15 +17,12 @@ if [[ ! -d "$temp_dir" ]]; then
     exit 1
 fi
 
-fix_account_id=$FIX_ACCOUNT_ID
-s3_bucket="fixpublic"
-s3_prefix="aws"
 
 template_file="fix-role.cf.template"
 environments=("dev-eu" "eu" "us")
 output_prefix="fix-role"
 
-for env in ${environments[@]}; do
+for env in "${environments[@]}"; do
     output_file="$temp_dir/${output_prefix}-${env}.yaml"
     callback_url="https://app.${env}.fixcloud.io/api/cloud/callbacks/aws/cf"
 
