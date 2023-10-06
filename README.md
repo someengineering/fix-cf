@@ -2,7 +2,7 @@
 
 ## Description
 
-This repository hosts the [CloudFormation templates](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://fixpublic.s3.amazonaws.com/aws/fix-role-dev-eu.yaml&stackName=FixAccess&param_FixTenantId=00000000-0000-0000-0000-000000000000&param_FixExternalId=00000000-0000-0000-0000-000000000000) for [FIX SaaS](https://fix.tt/) cross-account access, available at [https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml) and [https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml).
+This repository hosts the [CloudFormation templates](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://fixpublic.s3.amazonaws.com/aws/fix-role-dev-eu.yaml&stackName=FixAccess&param_WorkspaceId=00000000-0000-0000-0000-000000000000&param_ExternalId=00000000-0000-0000-0000-000000000000) for [FIX SaaS](https://fix.tt/) cross-account access, available at [https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml) and [https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml).
 
 The repository aims to provide a publicly auditable history of the FIX CloudFormation template.
 
@@ -14,8 +14,8 @@ The CloudFormation template requires the following parameters:
 
 | Parameter | Description |
 | ---------- | ---------- |
-| `FixTenantId`   | Your FIX-assigned Tenant ID |
-| `FixExternalId` | Your FIX-assigned External ID |
+| `WorkspaceId` | Your FIX-assigned Workspace ID |
+| `ExternalId`  | Your FIX-assigned External ID  |
 
 These parameters are generated and provided by FIX, accessible within your FIX account settings, and are pre-populated when using the links in the FIX application.
 
@@ -43,7 +43,7 @@ The request body comprises a JSON object with this structure:
 
 ```json
 {
-    "tenant_id": "<your FIX tenant ID>",
+    "workspace_id": "<your FIX workspace ID>",
     "external_id": "<your FIX external ID>",
     "account_id": "<the AWS account ID where the role was created>",
     "role_name": "<the name of the created role>",
@@ -51,4 +51,4 @@ The request body comprises a JSON object with this structure:
 }
 ```
 
-FIX leverages the tenant_id and external_id to authenticate the request's origin. The account_id and role_name are used to construct the ARN that FIX will assume when performing security scans, while the stack_id offers user convenience within the FIX UI by providing a link to the CloudFormation stack in the AWS console.
+FIX leverages the workspace_id and external_id to authenticate the request's origin. The account_id and role_name are used to construct the ARN that FIX will assume when performing security scans, while the stack_id offers user convenience within the FIX UI by providing a link to the CloudFormation stack in the AWS console.

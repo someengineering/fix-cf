@@ -2,11 +2,11 @@ AWSTemplateFormatVersion: 2010-09-09
 Description: This CloudFormation template creates a role in your AWS account that FIX can assume to perform security audits. It also deploys a lambda function that will send a callback to FIX with the account ID and name of the role that was created.
 
 Parameters:
-  FixTenantId:
-    Description: Your FIX-assigned Tenant ID (DO NOT EDIT)
-    Type: String
-  FixExternalId:
+  ExternalId:
     Description: Your FIX-assigned External ID (DO NOT EDIT)
+    Type: String
+  WorkspaceId:
+    Description: Your FIX-assigned Workspace ID (DO NOT EDIT)
     Type: String
 
 Outputs:
@@ -33,10 +33,32 @@ Resources:
           - 'sts:TagSession'
           Condition:
             StringEquals:
-              'sts:ExternalId': !Ref FixExternalId
+              'sts:ExternalId': !Ref ExternalId
       MaxSessionDuration: 10800
       ManagedPolicyArns:
       - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
+      Policies:
+      - PolicyName: FixOrgList
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Resource: '*'
+            Action:
+            - organizations:ListAccounts
+            - organizations:DescribeAccount
+            - ec2:DescribeRegions
+            - iam:ListAccountAliases
+      - PolicyName: FixPricingList
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Resource: '*'
+            Action:
+            - pricing:DescribeServices
+            - pricing:GetAttributeValues
+            - pricing:GetProducts
 
   FixAccessCallbackLogGroup:
     Type: 'AWS::Logs::LogGroup'
@@ -62,10 +84,10 @@ Resources:
           import boto3
           from botocore.exceptions import ClientError
           http = urllib3.PoolManager()
-          def fix_account_callback(tenant_id, external_id, account_id, role_name, stack_id):
+          def fix_account_callback(workspace_id, external_id, account_id, role_name, stack_id):
               callback_url = "{{callback_url}}"
               body = {
-                  "tenant_id": tenant_id,
+                  "workspace_id": workspace_id,
                   "external_id": external_id,
                   "account_id": account_id,
                   "role_name": role_name,
@@ -74,7 +96,7 @@ Resources:
               json_body = json.dumps(body)
               headers = {"Content-Type": "application/json", "Content-Length": str(len(json_body))}
               max_retries = 3
-              print(f"Letting FIX know that the account ID for tenant ID {tenant_id} is {account_id} and the role name is {role_name} for stack ID {stack_id}")
+              print(f"Letting FIX know that the account ID for workspace ID {workspace_id} is {account_id} and the role name is {role_name} for stack ID {stack_id}")
               for attempt in range(1, max_retries + 1):
                   try:
                       response = http.request("POST", callback_url, body=json_body.encode("utf-8"), headers=headers)
@@ -108,7 +130,7 @@ Resources:
           def fix_callback(event, context):
               stack_id = event["ResourceProperties"].get("StackId")
               role_name = event["ResourceProperties"].get("RoleName")
-              tenant_id = event["ResourceProperties"].get("TenantId")
+              workspace_id = event["ResourceProperties"].get("WorkspaceId")
               external_id = event["ResourceProperties"].get("ExternalId")
               response_data = {"role_name": role_name, "status": "Successfully sent callback to FIX"}
               if event.get("RequestType") in ("Delete", "Update"):
@@ -117,7 +139,7 @@ Resources:
                   return
               try:
                   account_id = boto3.client("sts").get_caller_identity().get("Account")
-                  fix_account_callback(tenant_id, external_id, account_id, role_name, stack_id)
+                  fix_account_callback(workspace_id, external_id, account_id, role_name, stack_id)
               except Exception as e:
                   response_data["status"] = "Failed to send callback to FIX"
                   print("fix_callback(..) failed: " + str(e))
@@ -155,6 +177,6 @@ Resources:
     Properties:
       StackId: !Ref AWS::StackId
       RoleName: !Ref FixCrossAccountAccessRole
-      TenantId: !Ref FixTenantId
-      ExternalId: !Ref FixExternalId
+      WorkspaceId: !Ref WorkspaceId
+      ExternalId: !Ref ExternalId
       ServiceToken: !GetAtt FixAccessCallbackFunction.Arn
