@@ -35,7 +35,7 @@ jobs:
       id: tempdir
       run: echo "dir=$(mktemp -d)" >> $GITHUB_OUTPUT
 
-    - name: Run the script
+    - name: Generate CloudFormation templates
       run: bash generate.sh "${{ steps.tempdir.outputs.dir }}"
 
     - name: Upload to S3
