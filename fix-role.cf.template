@@ -70,6 +70,8 @@ Resources:
 
   FixAccessCallbackFunction:
     Type: AWS::Lambda::Function
+    DependsOn:
+    - FixCrossAccountAccessRole
     Properties:
       Role: !GetAtt FixAccessCallbackFunctionRole.Arn
       Runtime: python3.9
