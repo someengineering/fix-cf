@@ -18,17 +18,19 @@ if [[ ! -d "$temp_dir" ]]; then
 fi
 
 
-template_file="fix-role.cf.template"
+template_files=("fix-role.cf.template" "fix-role-sns.cf.template")
 environments=("dev-eu" "eu" "us")
-output_prefix="fix-role"
 
-for env in "${environments[@]}"; do
-    output_file="$temp_dir/${output_prefix}-${env}.yaml"
-    callback_url="https://app.${env}.fixcloud.io/api/cloud/callbacks/aws/cf"
+for template_file in "${template_files[@]}"; do
+    output_prefix="${template_file%%.*}"
+    for env in "${environments[@]}"; do
+        output_file="$temp_dir/${output_prefix}-${env}.yaml"
+        callback_url="https://app.${env}.fixcloud.io/api/cloud/callbacks/aws/cf"
 
-    echo "Generating $output_file"
-    sed -e "s/{{environment}}/${env}/g" \
-        -e "s/{{fix_account_id}}/${fix_account_id}/g" \
-        -e "s#{{callback_url}}#${callback_url}#g" \
-        "$template_file" > "$output_file"
+        echo "Generating $output_file"
+        sed -e "s/{{environment}}/${env}/g" \
+            -e "s/{{fix_account_id}}/${fix_account_id}/g" \
+            -e "s#{{callback_url}}#${callback_url}#g" \
+            "$template_file" > "$output_file"
+    done
 done
