@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: This CloudFormation template creates a role in your AWS account that FIX can assume to perform security audits. It also deploys a lambda function that will send a callback to FIX with the account ID and name of the role that was created.
+
+Parameters:
+  ExternalId:
+    Description: Your FIX-assigned External ID (DO NOT EDIT)
+    Type: String
+  WorkspaceId:
+    Description: Your FIX-assigned Workspace ID (DO NOT EDIT)
+    Type: String
+
+Outputs:
+  FixAccessRoleName:
+    Description: Name of the FIX Access Role
+    Value: !GetAtt FixAccessFunction.RoleName
+
+Resources:
+  FixCrossAccountAccessRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Principal:
+            AWS: arn:aws:iam::{{fix_account_id}}:root
+          Action:
+          - 'sts:AssumeRole'
+          - 'sts:TagSession'
+          Condition:
+            StringEquals:
+              'sts:ExternalId': !Ref ExternalId
+      MaxSessionDuration: 10800
+      ManagedPolicyArns:
+      - 'arn:aws:iam::aws:policy/ReadOnlyAccess'
+      Policies:
+      - PolicyName: FixOrgList
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Resource: '*'
+            Action:
+            - organizations:ListAccounts
+            - organizations:DescribeAccount
+            - ec2:DescribeRegions
+            - iam:ListAccountAliases
+      - PolicyName: FixPricingList
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Resource: '*'
+            Action:
+            - pricing:DescribeServices
+            - pricing:GetAttributeValues
+            - pricing:GetProducts
+
+  FixAccessFunction:
+    Type: Custom::Function
+    Properties:
+      StackId: !Ref AWS::StackId
+      RoleName: !Ref FixCrossAccountAccessRole
+      WorkspaceId: !Ref WorkspaceId
+      ExternalId: !Ref ExternalId
+      ServiceToken: "arn:aws:sns:us-east-1:639605712835:FixAccountCallbacks"
