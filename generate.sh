@@ -18,7 +18,7 @@ if [[ ! -d "$temp_dir" ]]; then
 fi
 
 
-template_files=("fix-role.cf.template" "fix-role-sns.cf.template")
+template_files=("fix-role.cf.template" "fix-role-lambda.cf.template")
 environments=("dev-eu" "eu" "us")
 
 for template_file in "${template_files[@]}"; do
