@@ -12,7 +12,7 @@ Parameters:
 Outputs:
   FixAccessRoleName:
     Description: Name of the FIX Access Role
-    Value: !GetAtt FixAccessFunction.RoleName
+    Value: !GetAtt FixAccountCallback.RoleName
 
 Resources:
   FixCrossAccountAccessRole:
@@ -57,7 +57,7 @@ Resources:
             - pricing:GetAttributeValues
             - pricing:GetProducts
 
-  FixAccessFunction:
+  FixAccountCallback:
     Type: Custom::Function
     Properties:
       StackId: !Ref AWS::StackId
