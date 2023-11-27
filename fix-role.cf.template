@@ -64,4 +64,4 @@ Resources:
       RoleName: !Ref FixCrossAccountAccessRole
       WorkspaceId: !Ref WorkspaceId
       ExternalId: !Ref ExternalId
-      ServiceToken: "arn:aws:sns:us-east-1:{{fix_account_id}}:FixAccountCallbacks"
+      ServiceToken: !Sub "arn:aws:sns:${AWS::Region}:{{fix_account_id}}:FixAccountCallbacks"
