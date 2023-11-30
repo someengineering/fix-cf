@@ -19,7 +19,7 @@ fi
 
 
 template_files=("fix-role.cf.template" "fix-role-lambda.cf.template")
-environments=("dev-eu" "eu" "us")
+environments=("dev-eu" "global")
 
 for template_file in "${template_files[@]}"; do
     output_prefix="${template_file%%.*}"
