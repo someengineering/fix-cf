@@ -18,8 +18,8 @@ if [[ ! -d "$temp_dir" ]]; then
 fi
 
 
-template_files=("fix-role.cf.template" "fix-role-lambda.cf.template")
-environments=("dev-eu" "global")
+template_files=("fix-role.cf.template")
+environments=("dev" "global")
 
 for template_file in "${template_files[@]}"; do
     output_prefix="${template_file%%.*}"
@@ -34,3 +34,6 @@ for template_file in "${template_files[@]}"; do
             "$template_file" > "$output_file"
     done
 done
+
+# temporary workaround
+cp "$temp_dir/fix-role-dev.yaml" "$temp_dir/fix-role-dev-eu.yaml"
