@@ -56,6 +56,46 @@ Resources:
             - pricing:DescribeServices
             - pricing:GetAttributeValues
             - pricing:GetProducts
+      - PolicyName: FixRevokeUnnecessaryPermissions
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Deny
+            Resource: '*'
+            Action:
+            - athena:GetQueryResults
+            - cloudformation:GetTemplate
+            - codecommit:GetBlob
+            - codecommit:GetCommit
+            - codecommit:GetFile
+            - codecommit:GetFolder
+            - config:SelectAggregateResourceConfig
+            - config:SelectResourceConfig
+            - directconnect:DescribeConnectionLoa
+            - dynamodb:BatchGetItem
+            - dynamodb:GetItem
+            - dynamodb:Query
+            - dynamodb:Scan
+            - ec2:GetConsoleOutput
+            - ec2:GetConsoleScreenshot
+            - ec2:GetPasswordData
+            - ecr:BatchGetImage
+            - ecr:GetDownloadUrlForLayer
+            - glacier:GetJobOutput
+            - kinesis:GetRecords
+            - lambda:GetFunction
+            - lambda:GetLayerVersion
+            - rds:DownloadCompleteDBLogFile
+            - rds:DownloadDbLogFilePortion
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - sdb:Select*
+            - secretsmanager:GetSecretValue
+            - sns:GetSubscriptionAttributes
+            - sqs:ReceiveMessage
+            - ssm:GetParameter
+            - ssm:GetParameters
+            - ssm:GetParametersByPath
 
   FixAccountCallback:
     Type: Custom::Function
