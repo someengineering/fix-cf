@@ -20,6 +20,11 @@ fi
 
 template_files=("fix-role.cf.template")
 environments=("dev" "global")
+unixtime=$(date +%s)
+iso8601=$(date -d @$unixtime --iso-8601=seconds)
+
+echo "Generating stack_version.json"
+echo "{\"date\": \"$iso8601\", \"unixtime\": $unixtime}" | jq > "$temp_dir/stack_version.json"
 
 for template_file in "${template_files[@]}"; do
     output_prefix="${template_file%%.*}"
@@ -30,10 +35,8 @@ for template_file in "${template_files[@]}"; do
         echo "Generating $output_file"
         sed -e "s/{{environment}}/${env}/g" \
             -e "s/{{fix_account_id}}/${fix_account_id}/g" \
+            -e "s/{{unixtime}}/${unixtime}/g" \
             -e "s#{{callback_url}}#${callback_url}#g" \
             "$template_file" > "$output_file"
     done
 done
-
-# temporary workaround
-cp "$temp_dir/fix-role-dev.yaml" "$temp_dir/fix-role-dev-eu.yaml"
