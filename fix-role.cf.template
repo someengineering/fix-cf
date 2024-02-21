@@ -91,7 +91,6 @@ Resources:
             - s3:GetObjectVersion
             - sdb:Select*
             - secretsmanager:GetSecretValue
-            - sns:GetSubscriptionAttributes
             - sqs:ReceiveMessage
             - ssm:GetParameter
             - ssm:GetParameters
