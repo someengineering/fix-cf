@@ -21,7 +21,7 @@ fi
 template_files=("fix-role.cf.template")
 environments=("dev" "global")
 unixtime=$(date +%s)
-iso8601=$(date -d @$unixtime --iso-8601=seconds)
+iso8601=$(date -d @"$unixtime" --iso-8601=seconds)
 
 echo "Generating stack_version.json"
 echo "{\"date\": \"$iso8601\", \"unixtime\": $unixtime}" | jq > "$temp_dir/stack_version.json"
