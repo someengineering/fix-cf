@@ -2,7 +2,7 @@
 
 ## Description
 
-This repository hosts the [CloudFormation templates](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://fixpublic.s3.amazonaws.com/aws/fix-role-dev-eu.yaml&stackName=FixAccess&param_WorkspaceId=00000000-0000-0000-0000-000000000000&param_ExternalId=00000000-0000-0000-0000-000000000000) for [Fix SaaS](https://fix.security/) cross-account access, available at [https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-us.yaml) and [https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-eu.yaml).
+This repository hosts the [CloudFormation templates](https://console.aws.amazon.com/cloudformation/home#/stacks/create/review?templateURL=https://fixpublic.s3.amazonaws.com/aws/fix-role-global.yaml&stackName=FixAccess&param_WorkspaceId=00000000-0000-0000-0000-000000000000&param_ExternalId=00000000-0000-0000-0000-000000000000) for [Fix SaaS](https://fix.security/) cross-account access, available at [https://fixpublic.s3.amazonaws.com/aws/fix-role-global.yaml](https://fixpublic.s3.amazonaws.com/aws/fix-role-global.yaml).
 
 The repository aims to provide a publicly auditable history of the Fix CloudFormation template.
 
