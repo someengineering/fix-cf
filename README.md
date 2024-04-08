@@ -24,7 +24,7 @@ These parameters are generated and provided by Fix, accessible within your Fix a
 The CloudFormation template creates the following resources:
 
 * `FixCrossAccountAccessRole` ([AWS::IAM::Role](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)): This cross-account access role enables Fix to access your AWS account.
-* `FixAccountCallback` ([Custom::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-lambda.html)): This custom resource triggers a SNS message callback to Fix, though it does not create an actual resource in the AWS account.
+* `FixAccountCallback` ([Custom::Function](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources-sns.html)): This custom resource triggers a SNS message callback to Fix, though it does not create an actual resource in the AWS account.
 
 ## Fix Cross Account Access Role
 
