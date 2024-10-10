@@ -42,8 +42,8 @@ Resources:
           - Effect: Allow
             Resource: '*'
             Action:
-            - organizations:ListAccounts
-            - organizations:DescribeAccount
+            - organizations:List*
+            - organizations:Describe*
             - ec2:DescribeRegions
             - iam:ListAccountAliases
       - PolicyName: FixPricingList
